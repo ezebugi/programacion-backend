@@ -1,76 +1,81 @@
-class TicketManager {
-  #precioBaseGanancia = 0.15;
-
+class ProductManager {
   constructor() {
-    this.eventos = [];
+    this.products = [];
+    this.productId = 1;
   }
 
-  getEventos = () => {
-    return this.eventos;
-  };
+  addProduct(product) {
+    // Validar campos obligatorios
+    if (
+      !product.title ||
+      !product.description ||
+      !product.price ||
+      !product.thumbnail ||
+      !product.code ||
+      !product.stock
+    ) {
+      console.log("Error: Todos los campos son obligatorios");
+      return;
+    }
 
-  agregarEvento = (
-    nombre,
-    lugar,
-    precio,
-    capacidad = 50,
-    fecha = new Date().toLocaleDateString()
-  ) => {
-    const evento = {
-      nombre,
-      lugar,
-      precio: precio + precio * this.#precioBaseGanancia,
-      capacidad,
-      fecha,
-      participantes: [],
-    };
-    if (this.eventos.length === 0) {
-      evento.id = 1;
+    // Validar que el campo "code" no se repita
+    const existingProduct = this.products.find((p) => p.code === product.code);
+    if (existingProduct) {
+      console.log("Error: El código del producto ya existe");
+      return;
+    }
+
+    product.id = this.productId++;
+    this.products.push(product);
+  }
+
+  getProducts() {
+    return this.products;
+  }
+
+  getProductById(id) {
+    const product = this.products.find((p) => p.id === id);
+    if (product) {
+      return product;
     } else {
-      evento.id = this.eventos[this.eventos.length - 1].id + 1;
+      console.log("Error: Producto no encontrado");
     }
-    this.eventos.push(evento);
-  };
-
-  agregarUsuario = (idEvento, idUsuario) => {
-    const eventoId = this.eventos.findIndex((e) => e.id === idEvento);
-
-    if (eventoId === -1) {
-      console.log("El evento no fue encontrado");
-      return;
-    }
-    const usuarioRegistrado =
-      this.eventos[eventoId].participantes.includes(idUsuario);
-    if (usuarioRegistrado) {
-      console.log("El usuario ya está registrado");
-      return;
-    }
-
-    this.eventos[eventoId].participantes.push(idUsuario);
-  };
-
-  ponerEventoEnGira = (idEvento, nuevaLocalidad, nuevaFecha) => {
-    const eventoIndex = this.eventos.findIndex((e) => e.id === idEvento);
-    if (eventoIndex === -1) {
-      console.log("Evento no encontrado");
-      return;
-    }
-    const evento = this.eventos[eventoIndex];
-    const nuevoEvento = {
-      ...evento,
-      lugar: nuevaLocalidad,
-      fecha: nuevaFecha,
-      id: this.eventos[this.eventos.length - 1].id + 1,
-      participantes: [],
-    };
-    this.eventos.push(nuevoEvento);
-  };
+  }
 }
 
-const manejadorDeEventos = new TicketManager();
+const productManager = new ProductManager();
 
-manejadorDeEventos.agregarEvento("EventoPrueba", "Argentina", 200, 50);
-manejadorDeEventos.agregarUsuario(1, 2);
-manejadorDeEventos.ponerEventoEnGira(1, "Uruguay", "18/12/2022");
+// productos
+productManager.addProduct({
+  title: "Producto 1",
+  description: "Descripción del producto 1",
+  price: 10.99,
+  thumbnail: "ruta/imagen1.jpg",
+  code: "ABC123",
+  stock: 5,
+});
+productManager.addProduct({
+  title: "Producto 2",
+  description: "Descripción del producto 2",
+  price: 19.99,
+  thumbnail: "ruta/imagen2.jpg",
+  code: "DEF456",
+  stock: 10,
+});
+productManager.addProduct({
+  title: "Producto 3",
+  description: "Descripción del producto 3",
+  price: 5.99,
+  thumbnail: "ruta/imagen3.jpg",
+  code: "GHI789",
+  stock: 3,
+});
 
-console.log(manejadorDeEventos.getEventos());
+// Obtener todos los productos
+const allProducts = productManager.getProducts();
+console.log(allProducts);
+
+// Obtener producto por ID
+const productId = 2;
+const productById = productManager.getProductById(productId);
+console.log(productById);
