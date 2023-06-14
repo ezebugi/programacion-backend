@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "title": "Producto 1",
+    "description": "Descripción del producto 1",
+    "code": "P001",
+    "price": 10.99,
+    "status": true,
+    "stock": 100,
+    "category": "Categoría 1",
+    "thumbnails": ["ruta/imagen1.jpg", "ruta/imagen2.jpg"]
+  },
+  {
+    "id": 2,
+    "title": "Producto 2",
+    "description": "Descripción del producto 2",
+    "code": "P002",
+    "price": 19.99,
+    "status": true,
+    "stock": 50,
+    "category": "Categoría 2",
+    "thumbnails": ["ruta/imagen3.jpg", "ruta/imagen4.jpg"]
+  }
+]
