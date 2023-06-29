@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Productos en tiempo real</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io(); // Función para agregar un nuevo producto function
+      addProduct() { const productName =
+      document.getElementById('productName').value; socket.emit('newProduct',
+      productName); } // Función para eliminar un producto function
+      deleteProduct(productId) { socket.emit('deleteProduct', productId); } //
+      Escucha el evento 'updateProducts' desde el servidor
+      socket.on('updateProducts', (products) => { const productList =
+      document.getElementById('productList'); productList.innerHTML = '';
+      products.forEach((product) => { const li = document.createElement('li');
+      const deleteBtn = document.createElement('button'); deleteBtn.textContent
+      = 'Eliminar'; deleteBtn.onclick = () => deleteProduct(product.id);
+      li.textContent = product.name; li.appendChild(deleteBtn);
+      productList.appendChild(li); }); });
+    </script>
+  </head>
+  <body>
+    <h1>Listado de productos en tiempo real</h1>
+    <ul id="productList">
+      {{#each products}}
+        <li>{{this}}</li>
+      {{/each}}
+    </ul>
+
+    <h2>Agregar producto</h2>
+    <input type="text" id="productName" />
+    <button onclick="addProduct()">Agregar</button>
+
+      <h2>Borrar productos</h2>
+    <input type="text" id="deleteProduct" />
+    <button onclick="deleteProduct()">eliminar</button>
+
+      <h2>Todos los productos</h2>
+    <input type="text" id="getAllProducts" />
+    <button onclick="getAllProducts()">Todos</button>
+  </body>
+</html>
