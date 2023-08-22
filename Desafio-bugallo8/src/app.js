@@ -22,7 +22,31 @@ app.use(express.urlencoded({extended: true}));
 app.use('/api/users',usersRouter);
 app.use('/api/courses',courseRouter);
 
+const express = require('express');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const passportConfig = require('./config/passport-config');
+
+const app = express();
+
+mongoose.connect('mongodb://localhost:27017/auth-example', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.set('useCreateIndex', true);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+
+app.use('/api/auth', authRoutes);
+
+
+
+
 const server =app.listen(PORT,()=>console.log(`Server arriba: ${PORT}`));
+
+
+
 
 
 
